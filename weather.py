@@ -3,10 +3,12 @@ import re
 #change this to read other files
 filepath = "./weather.dat"
 
-#formats a string using a regular expression returning a list of valid integers (as I am ignoring the monthly average, which has floating point numbers, I assumed that I didn't need to handle them)
-#if floating point numbers were needed, this can just be changed to return a list of floating point numbers instead.
-def get_integers(a):
-    return [int(s) for s in re.findall(r'\d+(?:\.\d+)?', a)]
+#formats a string using a regular expression returning a list of valid integers
+#i am ignoring the monthly average, which has floating point numbers, but if they for some reason crop up in the data I handle them by rounding them to the nearest integer
+#if floating point numbers were needed, the pattern match still holds for floating points and can just be changed to return a
+#list of floating point numbers instead and then the answer would then be in floating point notation 
+def as_integer(a):
+    return [int(float(s)) for s in re.findall(r'\d+(?:\.\d+)?', a)]
 
 #takes a list of integers and finds the minimum value(s) from the list along with their indexes
 def find_min(a):
@@ -31,15 +33,16 @@ def get_minimum_temperature_difference(filepath):
         #ignore any lines which have bad data i.e letters as dates/temperatures and ignore the column headers and the monthly average column
         if not line[0].isalpha() and not line[1].isalpha() and not line[2].isalpha():
             day = line[0]
-            max_temp = get_integers(line[1])[0]
-            min_temp = get_integers(line[2])[0]
-            #making sure there is no bad data for min/max temperature, if so, alert the user ()
+            max_temp = as_integer(line[1])[0]
+            min_temp = as_integer(line[2])[0]
+            #making sure there is no minimum more than a maximum, if so, ignore it
             if max_temp < min_temp:
-                print("There is a minimum temperature that was more than a maximum temperature on day {}, it was ignored\n".format(day))
                 continue
             else:
                 days.append(day)
                 differences.append(max_temp-min_temp)
+        else:
+            continue
                    
     #minimum value of temperature difference
     minimum_difference = find_min(differences)
@@ -58,6 +61,8 @@ def get_minimum_temperature_difference(filepath):
         print("The minimum difference in temperature for the month is {} degrees on day {}".format(minimum_difference[0], days_with_minimum_difference[0]))
             
 get_minimum_temperature_difference(filepath)
+
+
     
 
 
