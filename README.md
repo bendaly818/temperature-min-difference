@@ -6,7 +6,7 @@ I have chosen to write this in Python (Version 3.7.1)
 
 ## Usage:
 
-Run the weather.py file in the command line
+Run weather.py in the command line using 'python weather.py'
 
 To change the input file, simply change the filepath value to your desired dataset
 
