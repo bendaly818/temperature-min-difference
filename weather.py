@@ -17,15 +17,16 @@ def get_minimum_temperature_difference(filepath):
         
     days = []
     differences = []
-    
+
     for item in weather_data:
-        #ignore any empty lists
+        #ignore any empty data
         if len(item) != 0:
-            #ignoring the column types and the month average row and making sure that there are valid 
-            if not item[0].isalpha() and len(get_integers(item[1])) != 0 and len(get_integers(item[2])) != 0:
+            #ignore any rows which have bad data i.e letters as dates/temperatures and ignore the column headers and the monthly average column
+            if not item[0].isalpha() and not item[1].isalpha() and not item[2].isalpha():
                 day = item[0]
                 max_temp = get_integers(item[1])[0]
                 min_temp = get_integers(item[2])[0]
+                #making sure there is no bad data for min/max temperature
                 if max_temp < min_temp:
                     print("There is a minimum temperature that was more than a maximum temperature on day {}, it was ignored.".format(day))
                     continue
@@ -46,12 +47,9 @@ def get_minimum_temperature_difference(filepath):
     else:
         day = days_with_minimum_difference[0]
         print("The minimum difference in temperature for the month is " + str(minimum_difference[0]) + " degrees on day " + day)
+            
+
     
-
-
-
-
-
 
 
 
